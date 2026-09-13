@@ -2,64 +2,77 @@ import type { Type } from "../types/type";
 
 interface ProductProps {
   productIcon: Type;
+  handleAddToStack: (product: Type) => void;
+  selectedProducts: Type[];
 }
 
-const Product = ({ productIcon }: ProductProps) => {
+const Product = ({
+  productIcon,
+  handleAddToStack,
+  selectedProducts,
+}: ProductProps) => {
+  const isSelected = selectedProducts.some(
+    (item) => item.id === productIcon.id
+  );
+
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-      
-      {/* Icon */}
-      <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-xl bg-gray-100">
-        <img
-          src={productIcon.icon}
-          alt={productIcon.name}
-          className="h-10 w-10 object-contain"
-        />
-      </div>
+    <div className="w-full max-w-md rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
 
-      {/* Content */}
-      <div>
-        
-        {/* Badge & Rating */}
-        <div className="mb-3 flex items-center justify-between">
-          <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-            {productIcon.badge}
-          </span>
-
-          <span className="text-sm font-semibold text-gray-700">
-            ⭐ {productIcon.rating}
-          </span>
+      {/* Top: Icon + Badge */}
+      <div className="mb-7 flex items-start justify-between">
+        <div className="flex h-12 w-12 items-center justify-center">
+          <img
+            src={productIcon.icon}
+            alt={productIcon.name}
+            className="h-10 w-10 object-contain"
+          />
         </div>
 
-        {/* Name */}
-        <h2 className="mb-2 text-2xl font-bold text-gray-900">
-          {productIcon.name}
-        </h2>
+        <span className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-600">
+          {productIcon.badge}
+        </span>
+      </div>
 
-        {/* Description */}
-        <p className="mb-5 text-sm leading-6 text-gray-500">
-          {productIcon.description}
-        </p>
+      {/* Product Name */}
+      <h2 className="mb-3 text-2xl font-bold text-gray-900">
+        {productIcon.name}
+      </h2>
 
-        {/* Category & Difficulty */}
-        <div className="mb-5 flex flex-wrap gap-2">
-          <span className="rounded-md bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700">
-            {productIcon.category}
-          </span>
+      {/* Description */}
+      <p className="mb-6 min-h-[48px] text-sm leading-6 text-gray-400">
+        {productIcon.description}
+      </p>
 
-          <span className="rounded-md bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700">
-            {productIcon.difficulty}
-          </span>
-        </div>
+      {/* Category + Difficulty + Rating */}
+      <div className="mb-5 flex items-center justify-between border-t border-gray-100 pt-4">
 
-        {/* Button */}
-        <button
-          className="w-full rounded-lg bg-gray-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-700"
-        >
-          Add to Stack
-        </button>
+        <span className="rounded-md bg-gray-50 px-3 py-1.5 text-xs font-medium text-gray-500">
+          {productIcon.category}
+        </span>
+
+        <span className="text-xs font-medium text-gray-500">
+          {productIcon.difficulty}
+        </span>
+
+        <span className="flex items-center gap-1 text-sm font-semibold text-gray-600">
+          <span className="text-yellow-400">★</span>
+          {productIcon.rating}
+        </span>
 
       </div>
+
+      {/* Button */}
+      <button
+        onClick={() => handleAddToStack(productIcon)}
+        disabled={isSelected}
+        className={`w-full rounded-lg py-3 text-sm font-semibold text-white transition-all duration-200 ${
+          isSelected
+            ? "cursor-not-allowed bg-gray-400"
+            : "cursor-pointer bg-[#080d1b] hover:bg-gray-800"
+        }`}
+      >
+        {isSelected ? "Added to Stack" : "Add to Stack"}
+      </button>
     </div>
   );
 };

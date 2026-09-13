@@ -1,4 +1,4 @@
-import { use } from "react";
+import { use, useState } from "react";
 import type { Type } from "../types/type";
 import Product from "./product";
 
@@ -9,16 +9,117 @@ interface ProductsProps {
 const Products = ({ ProductIconsData }: ProductsProps) => {
   const productIcons = use(ProductIconsData);
 
-  console.log(productIcons);
+  const [selectedProducts, setSelectedProducts] = useState<Type[]>([]);
+
+  const handleAddToStack = (product: Type) => {
+    const alreadySelected = selectedProducts.find(
+      (item) => item.id === product.id
+    );
+
+    if (alreadySelected) {
+      return;
+    }
+
+    setSelectedProducts([...selectedProducts, product]);
+  };
+
+  const handleRemove = (id: string) => {
+    setSelectedProducts(
+      selectedProducts.filter((item) => item.id !== id)
+    );
+  };
+
+  const handleRemoveAll = () => {
+    setSelectedProducts([]);
+  };
 
   return (
-    <div className="grid grid-cols-3 gap-6">
-      {productIcons.map((productIcon) => (
-        <Product
-          key={productIcon.id}
-          productIcon={productIcon}
-        />
-      ))}
+    <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 p-6 lg:grid-cols-4">
+
+      {/* Products */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:col-span-3">
+        {productIcons.map((productIcon) => (
+          <Product
+            key={productIcon.id}
+            productIcon={productIcon}
+            handleAddToStack={handleAddToStack}
+            selectedProducts={selectedProducts}
+          />
+        ))}
+      </div>
+
+      {/* Your Stack */}
+      <div>
+        <div className="sticky top-6 w-full rounded-[24px] border border-gray-100 bg-white p-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+
+          <h3 className="mb-1 text-xl font-bold text-slate-900">
+            Your Stack
+          </h3>
+
+          <p className="mb-5 text-sm text-slate-400">
+            {selectedProducts.length} Technology Selected
+          </p>
+
+          <div className="mb-5 space-y-3">
+
+            {selectedProducts.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50/50 p-3"
+              >
+
+                <div className="flex items-center gap-3">
+
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50 text-sm">
+                    <img
+                      src={item.icon}
+                      alt={item.name}
+                      className="h-6 w-6 object-contain"
+                    />
+                  </div>
+
+                  <div>
+                    <h4 className="text-sm font-semibold text-slate-900">
+                      {item.name}
+                    </h4>
+
+                    <span className="text-xs text-slate-400">
+                      {item.category}
+                    </span>
+                  </div>
+
+                </div>
+
+                <button
+                  onClick={() => handleRemove(item.id)}
+                  className="cursor-pointer px-2 py-1 text-base text-slate-400 transition hover:text-red-500"
+                >
+                  ✕
+                </button>
+
+              </div>
+            ))}
+
+            {selectedProducts.length === 0 && (
+              <p className="py-5 text-center text-sm text-slate-400">
+                No technology selected
+              </p>
+            )}
+
+          </div>
+
+          {selectedProducts.length > 0 && (
+            <button
+              onClick={handleRemoveAll}
+              className="w-full cursor-pointer rounded-xl border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-500 transition-colors hover:bg-red-50"
+            >
+              Remove All
+            </button>
+          )}
+
+        </div>
+      </div>
+
     </div>
   );
 };
