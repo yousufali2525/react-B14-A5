@@ -7,7 +7,7 @@ import Banner from './components/Banner';
 import Footer from './components/Footer';
 
 const ProductIconsData = async (): Promise<Type[]> => {
-  const res = await fetch(`${import.meta.env.BASE_URL}data.json`);
+  const res = await fetch('/data.json');
 
   if (!res.ok) {
     throw new Error("Failed to load data.json");

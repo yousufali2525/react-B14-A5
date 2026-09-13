@@ -1,3 +1,4 @@
+
 import { use, useState } from "react";
 import type { Type } from "../types/type";
 import Product from "./product";
@@ -11,33 +12,38 @@ const Products = ({ ProductIconsData }: ProductsProps) => {
 
   const [selectedProducts, setSelectedProducts] = useState<Type[]>([]);
 
+  // Add product to stack
   const handleAddToStack = (product: Type) => {
-    const alreadySelected = selectedProducts.find(
-      (item) => item.id === product.id
-    );
+    setSelectedProducts((prev) => {
+      const alreadySelected = prev.some(
+        (item) => item.id === product.id
+      );
 
-    if (alreadySelected) {
-      return;
-    }
+      if (alreadySelected) {
+        return prev;
+      }
 
-    setSelectedProducts([...selectedProducts, product]);
+      return [...prev, product];
+    });
   };
 
+  // Remove one product
   const handleRemove = (id: string) => {
-    setSelectedProducts(
-      selectedProducts.filter((item) => item.id !== id)
+    setSelectedProducts((prev) =>
+      prev.filter((item) => item.id !== id)
     );
   };
 
+  // Remove all products
   const handleRemoveAll = () => {
     setSelectedProducts([]);
   };
 
   return (
-    <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 p-6 lg:grid-cols-4">
+    <div className="mx-auto grid max-w-7xl grid-cols-1 items-start gap-6 p-6 lg:grid-cols-4">
 
       {/* Products */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:col-span-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:col-span-3 lg:grid-cols-3">
         {productIcons.map((productIcon) => (
           <Product
             key={productIcon.id}
@@ -49,10 +55,9 @@ const Products = ({ ProductIconsData }: ProductsProps) => {
       </div>
 
       {/* Your Stack */}
-      <div>
-        <div className="sticky top-6 w-full rounded-[24px] border border-gray-100 bg-white p-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+        <div className="sticky top-6 w-full rounded-[24px] border border-gray-100 bg-white mt-[10px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
 
-          <h3 className="mb-1 text-xl font-bold text-slate-900">
+          <h3 className=" mt-[40px] mb-1 text-xl font-bold text-slate-900 ">
             Your Stack
           </h3>
 
@@ -70,7 +75,7 @@ const Products = ({ ProductIconsData }: ProductsProps) => {
 
                 <div className="flex items-center gap-3">
 
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50 text-sm">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-orange-50">
                     <img
                       src={item.icon}
                       alt={item.name}
@@ -91,6 +96,7 @@ const Products = ({ ProductIconsData }: ProductsProps) => {
                 </div>
 
                 <button
+                  type="button"
                   onClick={() => handleRemove(item.id)}
                   className="cursor-pointer px-2 py-1 text-base text-slate-400 transition hover:text-red-500"
                 >
@@ -110,6 +116,7 @@ const Products = ({ ProductIconsData }: ProductsProps) => {
 
           {selectedProducts.length > 0 && (
             <button
+              type="button"
               onClick={handleRemoveAll}
               className="w-full cursor-pointer rounded-xl border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-500 transition-colors hover:bg-red-50"
             >
@@ -118,7 +125,6 @@ const Products = ({ ProductIconsData }: ProductsProps) => {
           )}
 
         </div>
-      </div>
 
     </div>
   );
