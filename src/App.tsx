@@ -5,8 +5,12 @@ import Products from './components/Products';
 
 const ProductIconsData = async (): Promise<Type[]> => {
   const res = await fetch(`${import.meta.env.BASE_URL}data.json`);
-  const data = await res.json();
 
+  if (!res.ok) {
+    throw new Error("Failed to load data.json");
+  }
+
+  const data = await res.json();
   return data;
 };
 
