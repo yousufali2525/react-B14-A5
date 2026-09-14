@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import './App.css';
+// import './App.css';
 import type { Type } from './types/type';
 import Products from './components/Products';
 import Nav from './components/Nav';

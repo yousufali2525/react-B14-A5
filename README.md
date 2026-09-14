@@ -1,10 +1,10 @@
- # 🚀 DevStack
+ #  DevStack
 
 DevStack is a modern web application that helps users explore different web development technologies and create their own technology stack. Users can select technologies and manage their selected stack easily.
 
 ##  Live Website
 
-[Live Demo](https://yousufali2525.github.io/react-B14-A5/)
+[Live Demo](https://glittery-taiyaki-11d365.netlify.app/)
 
 ##  GitHub Repository
 
@@ -141,7 +141,7 @@ onSelect(product);
 
 ---
 
-## 📱 Responsive Design
+## Responsive Design
 
 The application is designed to work on:
 
